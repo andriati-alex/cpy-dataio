@@ -58,8 +58,7 @@ rarr_print(int arr_size, double* arr, int compact_threshold, int tail_size)
     }
     for (i = 0; i < 5; i++)
     {
-        printf("\n\t");
-        print_sequence(' ', 5);
+        printf("\n\t\t");
         printf(".");
     }
     for (i = arr_size - tail_size; i < arr_size; i++)
@@ -100,8 +99,7 @@ carr_print(
     }
     for (i = 0; i < 5; i++)
     {
-        printf("\n\t");
-        print_sequence(' ', 5);
+        printf("\n\t\t");
         printf(".");
     }
     for (i = arr_size - tail_size; i < arr_size; i++)

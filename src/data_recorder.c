@@ -1,118 +1,111 @@
-#include "file_handle.h"
 #include "data_recorder.h"
+#include "file_handle.h"
 #include <stdlib.h>
 
 void
-carr_column_txt(char fname[], int arr_size, double complex* arr)
+carr_stream_record(
+    FILE*             f,
+    char              fmt[],
+    enum StartStream  in_newline,
+    enum FinishStream add_linebreak,
+    int               arr_size,
+    double complex*   arr)
+{
+    assert_file_pointer(f, "carr_inline routine");
+    if (in_newline) fprintf(f, "\n");
+    for (int j = 0; j < arr_size; j++)
+    {
+        fprintf(f, fmt, creal(arr[j]), cimag(arr[j]));
+    }
+    if (add_linebreak) fprintf(f, "\n");
+}
+
+void
+rarr_stream_record(
+    FILE*             f,
+    char              fmt[],
+    enum StartStream  in_newline,
+    enum FinishStream add_linebreak,
+    int               arr_size,
+    double*           arr)
+{
+    assert_file_pointer(f, "rarr_inline routine");
+    if (in_newline) fprintf(f, "\n");
+    for (int j = 0; j < arr_size; j++) fprintf(f, fmt, arr[j]);
+    if (add_linebreak) fprintf(f, "\n");
+}
+
+void
+carr_column_txt(char fname[], char fmt[], int arr_size, double complex* arr)
 {
     FILE*  f;
     double real, imag;
-
-    f = open_file_write(fname);
+    f = open_file(fname, "w");
     for (int j = 0; j < arr_size; j++)
     {
         real = creal(arr[j]);
         imag = cimag(arr[j]);
-        if (imag >= 0)
-            fprintf(f, "(%.15E+%.15Ej)", real, imag);
-        else
-            fprintf(f, "(%.15E%.15Ej)", real, imag);
+        fprintf(f, fmt, real, imag);
         fprintf(f, "\n");
     }
     fclose(f);
 }
 
 void
-rarr_column_txt(char fname[], int arr_size, double* arr)
+rarr_column_txt(char fname[], char fmt[], int arr_size, double* arr)
 {
     FILE* f;
-
-    f = open_file_write(fname);
+    f = open_file(fname, "w");
     for (int j = 0; j < arr_size; j++)
     {
-        fprintf(f, "%.15E\n", arr[j]);
+        fprintf(f, fmt, arr[j]);
+        fprintf(f, "\n");
     }
     fclose(f);
 }
 
 void
-carr_inline(FILE* f, int arr_size, double complex* arr)
+cmat_txt(char fname[], char fmt[], int nrows, int ncols, double complex** mat)
 {
-    double real, imag;
-
-    if (f == NULL)
-    {
-        printf("\n\nERROR: NULL file provided in carr_inline routine\n\n");
-        exit(EXIT_FAILURE);
-    }
-
-    for (int j = 0; j < arr_size; j++)
-    {
-        real = creal(arr[j]);
-        imag = cimag(arr[j]);
-        if (imag >= 0)
-            fprintf(f, " (%.15E+%.15Ej)", real, imag);
-        else
-            fprintf(f, " (%.15E%.15Ej)", real, imag);
-    }
-    fprintf(f, "\n");
-}
-
-void
-rarr_inline(FILE* f, int arr_size, double* arr)
-{
-    if (f == NULL)
-    {
-        printf("\n\nERROR: NULL file provided in rarr_inline routine\n\n");
-        exit(EXIT_FAILURE);
-    }
-
-    for (int j = 0; j < arr_size; j++) fprintf(f, " %.15E", arr[j]);
-    fprintf(f, "\n");
-}
-
-void
-cmat_txt(char fname[], int nrows, int ncols, double complex** mat)
-{
-    double real, imag;
-    FILE*  f;
-
-    f = open_file_write(fname);
-
+    FILE* f;
+    f = open_file(fname, "w");
     for (int i = 0; i < nrows; i++)
     {
-        for (int j = 0; j < ncols; j++)
-        {
-            real = creal(mat[i][j]);
-            imag = cimag(mat[i][j]);
-            if (imag >= 0)
-                fprintf(f, " (%.15E+%.15Ej)", real, imag);
-            else
-                fprintf(f, " (%.15E%.15Ej)", real, imag);
-        }
-        fprintf(f, "\n");
+        carr_stream_record(f, fmt, CURSOR_POSITION, LINE_BREAK, ncols, mat[i]);
     }
     fclose(f);
 }
 
 void
-cmat_txt_transpose(char fname[], int nrows, int ncols, double complex** mat)
+cmat_append(
+    char             fname[],
+    char             fmt[],
+    enum StartStream in_newline,
+    int              nrows,
+    int              ncols,
+    double complex** mat)
 {
-    double real, imag;
     FILE* f;
+    f = open_file(fname, "a");
+    if (in_newline) fprintf(f, "\n");
+    for (int i = 0; i < nrows; i++)
+    {
+        carr_stream_record(f, fmt, CURSOR_POSITION, LINE_BREAK, ncols, mat[i]);
+    }
+    fclose(f);
+}
 
-    f = open_file_write(fname);
-
+void
+cmat_txt_transpose(
+    char fname[], char fmt[], int nrows, int ncols, double complex** mat)
+{
+    FILE* f;
+    f = open_file(fname, "w");
     for (int j = 0; j < ncols; j++)
     {
         for (int i = 0; i < nrows; i++)
         {
-            real = creal(mat[i][j]);
-            imag = cimag(mat[i][j]);
-            if (imag >= 0)
-                fprintf(f, " (%.15E+%.15Ej)", real, imag);
-            else
-                fprintf(f, " (%.15E%.15Ej)", real, imag);
+            fprintf(f, fmt, creal(mat[i][j]), cimag(mat[i][j]));
         }
         fprintf(f, "\n");
     }
@@ -120,35 +113,22 @@ cmat_txt_transpose(char fname[], int nrows, int ncols, double complex** mat)
 }
 
 void
-rmat_txt(char fname[], int nrows, int ncols, double** mat)
-{
-    FILE*  f;
-
-    f = open_file_write(fname);
-
-    for (int i = 0; i < nrows; i++)
-    {
-        for (int j = 0; j < ncols; j++)
-        {
-            fprintf(f, " %.15E", mat[i][j]);
-        }
-        fprintf(f, "\n");
-    }
-    fclose(f);
-}
-
-void
-rmat_txt_transpose(char fname[], int nrows, int ncols, double** mat)
+cmat_append_transpose(
+    char             fname[],
+    char             fmt[],
+    enum StartStream in_newline,
+    int              nrows,
+    int              ncols,
+    double complex** mat)
 {
     FILE* f;
-
-    f = open_file_write(fname);
-
+    f = open_file(fname, "a");
+    if (in_newline) fprintf(f, "\n");
     for (int j = 0; j < ncols; j++)
     {
         for (int i = 0; i < nrows; i++)
         {
-            fprintf(f, " %.15E", mat[i][j]);
+            fprintf(f, fmt, creal(mat[i][j]), cimag(mat[i][j]));
         }
         fprintf(f, "\n");
     }
@@ -156,46 +136,207 @@ rmat_txt_transpose(char fname[], int nrows, int ncols, double** mat)
 }
 
 void
-cmat_inline_rowmajor(FILE* f, int nrows, int ncols, double complex** mat)
+rmat_txt(char fname[], char fmt[], int nrows, int ncols, double** mat)
 {
-    double real, imag;
-
-    if (f == NULL)
-    {
-        printf("\n\nERROR: NULL file pointer in cmat_inline\n\n");
-        exit(EXIT_FAILURE);
-    }
-
+    FILE* f;
+    f = open_file(fname, "w");
     for (int i = 0; i < nrows; i++)
     {
-        for (int j = 0; j < ncols; j++)
-        {
-            real = creal(mat[i][j]);
-            imag = cimag(mat[i][j]);
-            if (imag >= 0)
-                fprintf(f, " (%.15E+%.15Ej)", real, imag);
-            else
-                fprintf(f, " (%.15E%.15Ej)", real, imag);
-        }
+        rarr_stream_record(f, fmt, CURSOR_POSITION, LINE_BREAK, ncols, mat[i]);
     }
-    fprintf(f, "\n");
+    fclose(f);
 }
 
 void
-rmat_inline_rowmajor(FILE* f, int nrows, int ncols, double** mat)
+rmat_append(
+    char             fname[],
+    char             fmt[],
+    enum StartStream in_newline,
+    int              nrows,
+    int              ncols,
+    double**         mat)
 {
-    if (f == NULL)
+    FILE* f;
+    f = open_file(fname, "a");
+    if (in_newline) fprintf(f, "\n");
+    for (int i = 0; i < nrows; i++)
     {
-        printf("\n\nERROR: NULL file pointer in rmat_inline\n\n");
-        exit(EXIT_FAILURE);
+        rarr_stream_record(f, fmt, CURSOR_POSITION, LINE_BREAK, ncols, mat[i]);
     }
+    fclose(f);
+}
 
+void
+rmat_txt_transpose(char fname[], char fmt[], int nrows, int ncols, double** mat)
+{
+    FILE* f;
+    f = open_file(fname, "w");
+    for (int j = 0; j < ncols; j++)
+    {
+        for (int i = 0; i < nrows; i++)
+        {
+            fprintf(f, fmt, mat[i][j]);
+        }
+        fprintf(f, "\n");
+    }
+    fclose(f);
+}
+
+void
+rmat_append_transpose(
+    char             fname[],
+    char             fmt[],
+    enum StartStream in_newline,
+    int              nrows,
+    int              ncols,
+    double**         mat)
+{
+    FILE* f;
+    f = open_file(fname, "a");
+    if (in_newline) fprintf(f, "\n");
+    for (int j = 0; j < ncols; j++)
+    {
+        for (int i = 0; i < nrows; i++)
+        {
+            fprintf(f, fmt, mat[i][j]);
+        }
+        fprintf(f, "\n");
+    }
+    fclose(f);
+}
+
+void
+cmat_rowmajor_stream(
+    FILE*             f,
+    char              fmt[],
+    enum StartStream  in_newline,
+    enum FinishStream add_linebreak,
+    int               nrows,
+    int               ncols,
+    double complex**  mat)
+{
+    assert_file_pointer(f, "cmat_rowmajor_stream routine");
+    if (in_newline) fprintf(f, "\n");
+    for (int i = 0; i < nrows; i++)
+    {
+        carr_stream_record(
+            f, fmt, CURSOR_POSITION, NO_LINEBREAK, ncols, mat[i]);
+    }
+    if (add_linebreak) fprintf(f, "\n");
+}
+
+void
+rmat_rowmajor_stream(
+    FILE*             f,
+    char              fmt[],
+    enum StartStream  in_newline,
+    enum FinishStream add_linebreak,
+    int               nrows,
+    int               ncols,
+    double**          mat)
+{
+    assert_file_pointer(f, "rmat_rowmajor_stream routine");
+    if (in_newline) fprintf(f, "\n");
+    for (int i = 0; i < nrows; i++)
+    {
+        rarr_stream_record(
+            f, fmt, CURSOR_POSITION, NO_LINEBREAK, ncols, mat[i]);
+    }
+    if (add_linebreak) fprintf(f, "\n");
+}
+
+void
+cmat_rowmajor_column_txt(
+    char fname[], char fmt[], int nrows, int ncols, double complex** mat)
+{
+    FILE* f;
+    f = open_file(fname, "w");
     for (int i = 0; i < nrows; i++)
     {
         for (int j = 0; j < ncols; j++)
         {
-            fprintf(f, " %.15E", mat[i][j]);
+            fprintf(f, fmt, creal(mat[i][j]), cimag(mat[i][j]));
+            fprintf(f, "\n");
         }
     }
-    fprintf(f, "\n");
+    fclose(f);
+}
+
+void
+rmat_rowmajor_column_txt(
+    char fname[], char fmt[], int nrows, int ncols, double** mat)
+{
+    FILE* f;
+    f = open_file(fname, "w");
+    for (int i = 0; i < nrows; i++)
+    {
+        for (int j = 0; j < ncols; j++)
+        {
+            fprintf(f, fmt, mat[i][j]);
+            fprintf(f, "\n");
+        }
+    }
+    fclose(f);
+}
+
+void
+carr_append_stream(
+    char              fname[],
+    char              fmt[],
+    enum StartStream  in_newline,
+    enum FinishStream add_linebreak,
+    int               arr_size,
+    double complex*   arr)
+{
+    FILE* f;
+    f = open_file(fname, "a");
+    carr_stream_record(f, fmt, in_newline, add_linebreak, arr_size, arr);
+    fclose(f);
+}
+
+void
+rarr_append_stream(
+    char              fname[],
+    char              fmt[],
+    enum StartStream  in_newline,
+    enum FinishStream add_linebreak,
+    int               arr_size,
+    double*           arr)
+{
+    FILE* f;
+    f = open_file(fname, "a");
+    rarr_stream_record(f, fmt, in_newline, add_linebreak, arr_size, arr);
+    fclose(f);
+}
+
+void
+cmat_rowmajor_append_stream(
+    char              fname[],
+    char              fmt[],
+    enum StartStream  in_newline,
+    enum FinishStream add_linebreak,
+    int               nrows,
+    int               ncols,
+    double complex**  mat)
+{
+    FILE* f;
+    f = open_file(fname, "a");
+    cmat_rowmajor_stream(f, fmt, in_newline, add_linebreak, nrows, ncols, mat);
+    fclose(f);
+}
+
+void
+rmat_rowmajor_append_stream(
+    char              fname[],
+    char              fmt[],
+    enum StartStream  in_newline,
+    enum FinishStream add_linebreak,
+    int               nrows,
+    int               ncols,
+    double**          mat)
+{
+    FILE* f;
+    f = open_file(fname, "a");
+    rmat_rowmajor_stream(f, fmt, in_newline, add_linebreak, nrows, ncols, mat);
+    fclose(f);
 }
