@@ -29,17 +29,23 @@ enum FinishStream
     LINE_BREAK
 };
 
-#define CPLX_FMT_SPACE_BOTH   " (%.15E%+.15Ej) " /// " (%.15E%+.15Ej) "
-#define CPLX_FMT_SPACE_BEFORE " (%.15E%+.15Ej)"  /// " (%.15E%+.15Ej)"
-#define CPLX_FMT_SPACE_AFTER  "(%.15E%+.15Ej) "  /// "(%.15E%+.15Ej) "
-#define CPLX_FMT_NOSPACE      "(%.15E%+.15Ej)"   /// "(%.15E%+.15Ej)"
-#define CPLX_FMT_LINEBREAK    "(%.15E%+.15Ej)\n" /// "(%.15E%+.15Ej)\n"
-#define REAL_FMT_SPACE_BOTH   " %.15E "          /// " %.15E "
-#define REAL_FMT_SPACE_BEFORE " %.15E"           /// " %.15E"
-#define REAL_FMT_SPACE_AFTER  "%.15E "           /// "%.15E "
-#define REAL_FMT_NOSPACE      "%.15E"            /// "%.15E"
-#define REAL_FMT_LINEBREAK    "%.15E\n"          /// "%.15E\n"
-#define DEFAULT_COMMENT_CHAR  '#'                /// comment trigger
+enum Bool
+{
+    FALSE,
+    TRUE
+};
+
+#define CPLX_SCIFMT_SPACE_BOTH   " (%.15E%+.15Ej) " /// " (%.15E%+.15Ej) "
+#define CPLX_SCIFMT_SPACE_BEFORE " (%.15E%+.15Ej)"  /// " (%.15E%+.15Ej)"
+#define CPLX_SCIFMT_SPACE_AFTER  "(%.15E%+.15Ej) "  /// "(%.15E%+.15Ej) "
+#define CPLX_SCIFMT_NOSPACE      "(%.15E%+.15Ej)"   /// "(%.15E%+.15Ej)"
+#define REAL_SCIFMT_SPACE_BOTH   " %.15E "          /// " %.15E "
+#define REAL_SCIFMT_SPACE_BEFORE " %.15E"           /// " %.15E"
+#define REAL_SCIFMT_SPACE_AFTER  "%.15E "           /// "%.15E "
+#define REAL_SCIFMT_NOSPACE      "%.15E"            /// "%.15E"
+#define DEFAULT_COMMENT_CHAR     '#'                /// comment trigger
+
+extern char comment_char;
 
 /** \brief Exit with failure if file pointer is NULL reporting a message */
 void
@@ -51,7 +57,7 @@ open_file(char fname[], char mode[]);
 
 /** \brief Return number of lines in a file */
 unsigned int
-number_of_lines(char fname[]);
+number_of_lines(char fname[], enum Bool skip_comments);
 
 /** \brief Move reading cursor of a file to the beginning of next line */
 void

@@ -1,6 +1,8 @@
 #include "file_handle.h"
 #include <stdlib.h>
 
+char comment_char = DEFAULT_COMMENT_CHAR;
+
 void
 assert_file_pointer(FILE* f, char client_msg[])
 {
@@ -25,7 +27,7 @@ open_file(char fname[], char mode[])
 }
 
 unsigned int
-number_of_lines(char fname[])
+number_of_lines(char fname[], enum Bool skip_comments)
 {
     char         c;
     FILE*        f;
@@ -34,6 +36,7 @@ number_of_lines(char fname[])
     linebreaks = 0;
     has_end_linebreak = 0;
     f = open_file(fname, "r");
+    if (skip_comments) jump_comment_lines(f, CURSOR_POSITION);
     while ((c = getc(f)) != EOF)
     {
         has_end_linebreak = 0;
@@ -67,7 +70,7 @@ jump_comment_lines(FILE* f, enum StartStream in_newline)
     while ((c = getc(f)) != EOF)
     {
         if (c == '\n' || c == ' ') continue;
-        if (c == DEFAULT_COMMENT_CHAR)
+        if (c == comment_char)
         {
             jump_next_line(f);
         } else

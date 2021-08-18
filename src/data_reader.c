@@ -1,8 +1,6 @@
 #include "file_handle.h"
-#include <complex.h>
+#include "data_reader.h"
 #include <stdlib.h>
-
-// n = fscanf(f, " (%lf%lfj)", &real, &imag);
 
 static const unsigned int BUFF_SIZE = 256;
 
@@ -19,13 +17,16 @@ report_array_read_problem(FILE* f, int index, int arr_size, char info[])
 }
 
 void
-carr_txt_read(char fname[], int arr_size, char const fmt[], double complex* arr)
+carr_txt_read(
+    char fname[], char fmt[], int init_line, int arr_size, double complex* arr)
 {
     int    i, n;
     double real, imag;
     FILE*  f;
 
-    f = open_file_read(fname);
+    f = open_file(fname, "r");
+    jump_comment_lines(f, CURSOR_POSITION);
+    while (--init_line > 0) jump_next_line(f);
     for (i = 0; i < arr_size; i++)
     {
         n = fscanf(f, fmt, &real, &imag);
@@ -41,12 +42,15 @@ carr_txt_read(char fname[], int arr_size, char const fmt[], double complex* arr)
 }
 
 void
-rarr_txt_read(char fname[], int arr_size, double* arr, char const fmt[])
+rarr_txt_read(
+    char fname[], char fmt[], int init_line, int arr_size, double* arr)
 {
     int   i, n;
     FILE* f;
 
-    f = open_file_read(fname);
+    f = open_file(fname, "r");
+    jump_comment_lines(f, CURSOR_POSITION);
+    while (--init_line > 0) jump_next_line(f);
     for (i = 0; i < arr_size; i++)
     {
         n = fscanf(f, fmt, &arr[i]);
@@ -61,7 +65,7 @@ rarr_txt_read(char fname[], int arr_size, double* arr, char const fmt[])
 }
 
 void
-carr_stream_read(FILE* f, int arr_size, double complex* arr, char const fmt[])
+carr_stream_read(FILE* f, char fmt[], int arr_size, double complex* arr)
 {
     int    i, n;
     double real, imag;
@@ -72,8 +76,7 @@ carr_stream_read(FILE* f, int arr_size, double complex* arr, char const fmt[])
         n = fscanf(f, fmt, &real, &imag);
         if (n != 2)
         {
-            char err_info[BUFF_SIZE];
-            sprintf(err_info, "Reading from file pointer in carr_stream_read");
+            char err_info[] = "Reading from file pointer in carr_stream_read";
             report_array_read_problem(f, i, arr_size, err_info);
         }
         arr[i] = real + I * imag;
@@ -81,7 +84,7 @@ carr_stream_read(FILE* f, int arr_size, double complex* arr, char const fmt[])
 }
 
 void
-rarr_stream_read(FILE* f, int arr_size, double* arr, char const fmt[])
+rarr_stream_read(FILE* f, char fmt[], int arr_size, double* arr)
 {
     int i, n;
 
@@ -91,8 +94,7 @@ rarr_stream_read(FILE* f, int arr_size, double* arr, char const fmt[])
         n = fscanf(f, fmt, &arr[i]);
         if (n != 1)
         {
-            char err_info[BUFF_SIZE];
-            sprintf(err_info, "Reading from file pointer in rarr_stream_read");
+            char err_info[] = "Reading from file pointer in rarr_stream_read";
             report_array_read_problem(f, i, arr_size, err_info);
         }
     }
@@ -100,13 +102,20 @@ rarr_stream_read(FILE* f, int arr_size, double* arr, char const fmt[])
 
 void
 cmat_txt_read(
-    char fname[], int nrows, int ncols, char const fmt[], double complex** mat)
+    char   fname[],
+    char   fmt[],
+    int    init_line,
+    int    nrows,
+    int    ncols,
+    double complex** mat)
 {
     int    i, j, n;
     double real, imag;
     FILE*  f;
 
-    f = open_file_read(fname);
+    f = open_file(fname, "r");
+    jump_comment_lines(f, CURSOR_POSITION);
+    while (--init_line > 0) jump_next_line(f);
     for (i = 0; i < nrows; i++)
     {
         for (j = 0; j < ncols; j++)
@@ -131,12 +140,14 @@ cmat_txt_read(
 
 void
 rmat_txt_read(
-    char fname[], int nrows, int ncols, char const fmt[], double** mat)
+    char fname[], char fmt[], int init_line, int nrows, int ncols, double** mat)
 {
     int   i, j, n;
     FILE* f;
 
-    f = open_file_read(fname);
+    f = open_file(fname, "r");
+    jump_comment_lines(f, CURSOR_POSITION);
+    while (--init_line > 0) jump_next_line(f);
     for (i = 0; i < nrows; i++)
     {
         for (j = 0; j < ncols; j++)
