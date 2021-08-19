@@ -14,9 +14,9 @@
  * in most cases, it is possible to have an equivalent form with raw
  * **stream** functions
  *
- * For instance the \code carr_column_txt \endcode is equivalent to
- * first open the file and then call \code carr_stream_record \endcode
- * using the formatter with a linebreak character '\n' appended.
+ * For instance the `carr_column_txt` is equivalent to first open the
+ * file and then call `carr_stream_record` using the formatter with a
+ * linebreak character '\n' appended.
  */
 
 #ifndef DATA_RECORDER_H
@@ -32,12 +32,12 @@
  * must have at least two double pattern in string contents for real
  * and imag parts formatting
  *
- * \param f[in]          Pointer to open file
- * \param fmt[in]        String formatter with at least two double patterns
- * \param how_start[in]  Whether to place or not a linebreak before record
- * \param how_finish[in] Whether to place or not a linebreak at stream end
- * \param arr_size[in]   number of values to record
- * \param arr[in]        array with values to record
+ * \param[in] f          Pointer to open file
+ * \param[in] fmt        String formatter with at least two double patterns
+ * \param[in] how_start  Whether to place or not a linebreak before record
+ * \param[in] how_finish Whether to place or not a linebreak at stream end
+ * \param[in] arr_size   number of values to record
+ * \param[in] arr        array with values to record
  *
  * \see enum StartStream
  * \see enum FinishStream
@@ -57,12 +57,12 @@ carr_stream_record(
  * All values are recorded according to the provided formatter which
  * must have only one double pattern in string contents
  *
- * \param f[in]          Pointer to open file
- * \param fmt[in]        String formatter with only one double pattern
- * \param how_start[in]  Whether to place or not a linebreak before record
- * \param how_finish[in] Whether to place or not a linebreak at stream end
- * \param arr_size[in]   number of values to record
- * \param arr[in]        array with values to record
+ * \param[in] f          Pointer to open file
+ * \param[in] fmt        String formatter with only one double pattern
+ * \param[in] how_start  Whether to place or not a linebreak before record
+ * \param[in] how_finish Whether to place or not a linebreak at stream end
+ * \param[in] arr_size   number of values to record
+ * \param[in] arr        array with values to record
  *
  * \see enum StartStream
  * \see enum FinishStream
@@ -82,15 +82,15 @@ rarr_stream_record(
  * Opens the file in write mode, thus, if it already exists will
  * be overwritten. The formatter string shall provide two double
  * patterns for real and imag parts. This routine can be engineered
- * using \code carr_stream_record \endcode with a formatter that
- * ends with a linebreak and a fresh created file to write
+ * using `carr_stream_record`, with a formatter that ends with a
+ * linebreak and a fresh created file to write
  *
  * \note Left a trailing line break. Remind that for further use in append
  *
- * \param fname[in]    name of full path to file
- * \param fmt[in]      formatter with two double pattern in string
- * \param arr_size[in] number of array elements to record
- * \param arr[in]      array with values to record
+ * \param[in] fname    name of full path to file
+ * \param[in] fmt      formatter with two double pattern in string
+ * \param[in] arr_size number of array elements to record
+ * \param[in] arr      array with values to record
  *
  * \see carr_stream_record
  */
@@ -101,16 +101,16 @@ carr_column_txt(char fname[], char fmt[], int arr_size, double complex* arr);
  *
  * Opens the file in write mode, thus, if it already exists will
  * be overwritten. The formatter string shall provide a single
- * double pattern. This routine can be engineered using \code
- * rarr_stream_record \endcode with a formatter that ends with a
+ * double pattern. This routine can be engineered using 
+ * `rarr_stream_record` with a formatter that ends with
  * linebreak and a fresh created file to write
  *
  * \note Left a trailing line break. Remind that for further use in append
  *
- * \param fname[in]    name of full path to file
- * \param fmt[in]      formatter with one double pattern in string
- * \param arr_size[in] number of array elements to record
- * \param arr[in]      array with values to record
+ * \param[in] fname    name of full path to file
+ * \param[in] fmt      formatter with one double pattern in string
+ * \param[in] arr_size number of array elements to record
+ * \param[in] arr      array with values to record
  *
  * \see rarr_stream_record
  */
@@ -128,18 +128,18 @@ rarr_column_txt(char fname[], char fmt[], int arr_size, double* arr);
  *
  * \note Left a trailing line break. Remind it to after use in append mode
  *
- * \param fname[in] name of full path to file
- * \param fmt[in]   formatter with two double pattern in string
- * \param nrows[in] number of rows in the matrix
- * \param ncols[in] number of columns in the matrix
- * \param mat[in]   matrix with values to record
+ * \param[in] fname name of full path to file
+ * \param[in] fmt   formatter with two double pattern in string
+ * \param[in] nrows number of rows in the matrix
+ * \param[in] ncols number of columns in the matrix
+ * \param[in] mat   matrix with values to record
  */
 void
 cmat_txt(char fname[], char fmt[], int nrows, int ncols, double complex** mat);
 
 /** \brief Record complex matrix appending to existing file
  *
- * Perform the same task of \code cmat_txt \endcode despite the file
+ * Perform the same task of `cmat_txt` despite the file
  * is not overwritten, instead, the matrix is appended. Provides the
  * possibility to start in new line
  *
@@ -161,18 +161,18 @@ cmat_append(
 
 /** \brief Record transpose of complex matrix to text file
  *
- * Similar to \code cmat_txt \endcode but first transpose the matrix
+ * Similar to `cmat_txt` but first transpose the matrix
  *
  * \warning The formatter must also include a column separator to the
  *          left or right of number pattern. Usually it is a space
  *
  * \note Left a trailing line break. Remind it to after use in append mode
  *
- * \param fname[in] name of full path to file
- * \param fmt[in]   formatter with one double pattern in string
- * \param nrows[in] number of rows in the matrix
- * \param ncols[in] number of columns in the matrix
- * \param mat[in]   matrix with values to record
+ * \param[in] fname name of full path to file
+ * \param[in] fmt   formatter with one double pattern in string
+ * \param[in] nrows number of rows in the matrix
+ * \param[in] ncols number of columns in the matrix
+ * \param[in] mat   matrix with values to record
  *
  * \see cmat_txt
  */
@@ -182,8 +182,8 @@ cmat_txt_transpose(
 
 /** \brief Record transpose of complex matrix appending to text file
  *
- * Equivalent to \code cmat_txt_transpose \endcode but if the file exists
- * it is not overwritten, instead, the matrix is appended. Also, provides
+ * Equivalent to `cmat_txt_transpose`, but if the file exists it is
+ * not overwritten, instead, the matrix is appended. Also, provides
  * the possibility to start appending in new line
  *
  * \warning The formatter must also include a column separator to the
@@ -213,19 +213,19 @@ cmat_append_transpose(
  *
  * \note Left a trailing line break. Remind it to after use in append mode
  *
- * \param fname[in] name of full path to file
- * \param fmt[in]   formatter with two double pattern in string
- * \param nrows[in] number of rows in the matrix
- * \param ncols[in] number of columns in the matrix
- * \param mat[in]   matrix with values to record
+ * \param[in] fname name of full path to file
+ * \param[in] fmt   formatter with two double pattern in string
+ * \param[in] nrows number of rows in the matrix
+ * \param[in] ncols number of columns in the matrix
+ * \param[in] mat   matrix with values to record
  */
 void
 rmat_txt(char fname[], char fmt[], int nrows, int ncols, double** mat);
 
 /** \brief Record real matrix appending to existing file
  *
- * Perform the same task of \code rmat_txt \endcode despite the file
- * is not overwritten, instead, the matrix is appended. Provides the
+ * Perform the same task of `rmat_txt` despite the file is not
+ * overwritten, instead, the matrix is appended. Provides the
  * possibility to start in new line
  *
  * \warning The formatter must also include a column separator to the
@@ -246,7 +246,7 @@ rmat_append(
 
 /** \brief Record transpose of real matrix to text file
  *
- * Similar to \code rmat_txt \endcode but first transpose the matrix
+ * Similar to `rmat_txt` but first transpose the matrix
  *
  * \see rmat_txt
  *
@@ -255,11 +255,11 @@ rmat_append(
  *
  * \note Left a trailing line break. Remind it to after use in append mode
  *
- * \param fname[in] name of full path to file
- * \param fmt[in]   formatter with one double pattern in string
- * \param nrows[in] number of rows in the matrix
- * \param ncols[in] number of columns in the matrix
- * \param mat[in]   matrix with values to record
+ * \param[in] fname name of full path to file
+ * \param[in] fmt   formatter with one double pattern in string
+ * \param[in] nrows number of rows in the matrix
+ * \param[in] ncols number of columns in the matrix
+ * \param[in] mat   matrix with values to record
  */
 void
 rmat_txt_transpose(
@@ -267,8 +267,8 @@ rmat_txt_transpose(
 
 /** \brief Record transpose of real matrix appending to text file
  *
- * Equivalent to \code rmat_txt_transpose \endcode but if the file exists
- * it is not overwritten, instead, the matrix is appended. Also, provides
+ * Equivalent to `rmat_txt_transpose`, but if the file exists it is
+ * not overwritten, instead, the matrix is appended. Also, provides
  * the possibility to start appending in new line
  *
  * \warning The formatter must also include a column separator to the
@@ -290,8 +290,8 @@ rmat_append_transpose(
 /** \brief Record stream of values from complex matrix in rowmajor format
  *
  * Equivalent to set the matrix in rowmajor format and call
- * \code carr_stream_record \endcode which provide the same
- * function signature except for the matrix input
+ * `carr_stream_record` which provide the same function
+ * signature except for the matrix input
  *
  * \see carr_stream_record
  */
@@ -308,8 +308,8 @@ cmat_rowmajor_stream(
 /** \brief Record stream of values from real matrix in rowmajor format
  *
  * Equivalent to set the matrix in rowmajor format and call
- * \code rarr_stream_record \endcode which provide the same
- * function signature except for the matrix input
+ * `rarr_stream_record` which provide the same function
+ * signature except for the matrix input
  *
  * \see rarr_stream_record
  */
@@ -327,7 +327,7 @@ rmat_rowmajor_stream(
  *
  * Wrapper routine to record a matrix as column vector which is the
  * rowmajor format of the matrix. Equivalent to create the rowmajor
- * format in an array and use \code carr_column_txt \endcode
+ * format in an array and use `carr_column_txt`
  *
  * \see carr_column_txt
  */
@@ -339,7 +339,7 @@ cmat_rowmajor_column_txt(
  *
  * Wrapper routine to record a matrix as column vector which is the
  * rowmajor format of the matrix. Equivalent to create the rowmajor
- * format in an array and use \code rarr_column_txt \endcode
+ * format in an array and use `rarr_column_txt`
  *
  * \see rarr_column_txt
  */
@@ -349,8 +349,7 @@ rmat_rowmajor_column_txt(
 
 /** \brief Append to existing file stream of complex values
  *
- * Wrapper routine to call \code carr_stream_record \endcode
- * with a file open in append mode using file name
+ * Wrapper routine to call `carr_stream_record` using file name
  *
  * \see carr_stream_record
  */
@@ -365,8 +364,7 @@ carr_append_stream(
 
 /** \brief Append to existing file stream of real values
  *
- * Wrapper routine to call \code rarr_stream_record \endcode
- * with a file open in append mode using file name
+ * Wrapper routine to call `rarr_stream_record` using file name
  *
  * \see rarr_stream_record
  */
@@ -381,8 +379,7 @@ rarr_append_stream(
 
 /** \brief Append complex matrix using rowmajor format
  *
- * Wrapper routine to call \code cmat_rowmajor_stream \endcode
- * with a file open in append mode using file name
+ * Wrapper routine to call `cmat_rowmajor_stream` using file name
  *
  * \see cmat_rowmajor_stream
  */
@@ -398,8 +395,7 @@ cmat_rowmajor_append_stream(
 
 /** \brief Append real matrix using rowmajor format
  *
- * Wrapper routine to call \code rmat_rowmajor_stream \endcode
- * with a file open in append mode using file name
+ * Wrapper routine to call `rmat_rowmajor_stream` using file name
  *
  * \see rmat_rowmajor_stream
  */

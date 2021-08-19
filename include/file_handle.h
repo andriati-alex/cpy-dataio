@@ -2,12 +2,11 @@
  *
  * \author Alex Andriati
  * \date Aug/2021
- * \brief Simple improved toolbox for an easier files usage
+ * \brief Simple improved toolbox for easy file manipulation
  *
  * Some macros are provided for better integration with numpy, formmating
- * string to write complex numbers using brackets and \code j \endcode as
- * imaginary unit. By default, the macros provide 16 digits, according to
- * C double precision. Moreover, these macros use explonential notation
+ * string to write complex numbers using brackets and `j` for imaginary
+ * unit. Use exponential notation with 16 digits
  */
 
 #ifndef FILE_HANDLE_H
@@ -36,17 +35,18 @@ enum Bool
     TRUE
 };
 
-#define CPLX_SCIFMT_SPACE_BOTH   " (%.15E%+.15Ej) " /// " (%.15E%+.15Ej) "
-#define CPLX_SCIFMT_SPACE_BEFORE " (%.15E%+.15Ej)"  /// " (%.15E%+.15Ej)"
-#define CPLX_SCIFMT_SPACE_AFTER  "(%.15E%+.15Ej) "  /// "(%.15E%+.15Ej) "
-#define CPLX_SCIFMT_NOSPACE      "(%.15E%+.15Ej)"   /// "(%.15E%+.15Ej)"
-#define CPLX_SCIFMT_LINEBREAK    "(%.15E%+.15Ej)\n" /// "(%.15E%+.15Ej)\n"
-#define REAL_SCIFMT_SPACE_BOTH   " %.15E "          /// " %.15E "
-#define REAL_SCIFMT_SPACE_BEFORE " %.15E"           /// " %.15E"
-#define REAL_SCIFMT_SPACE_AFTER  "%.15E "           /// "%.15E "
-#define REAL_SCIFMT_NOSPACE      "%.15E"            /// "%.15E"
-#define REAL_SCIFMT_LINEBREAK    "%.15E\n"          /// "%.15E\n"
-#define DEFAULT_COMMENT_CHAR     '#'                /// default comment trigger
+#define CPLX_SCIFMT_SPACE_BOTH   " (%.15E%+.15Ej) "
+#define CPLX_SCIFMT_SPACE_BEFORE " (%.15E%+.15Ej)"
+#define CPLX_SCIFMT_SPACE_AFTER  "(%.15E%+.15Ej) "
+#define CPLX_SCIFMT_NOSPACE      "(%.15E%+.15Ej)"
+#define CPLX_SCIFMT_LINEBREAK    "(%.15E%+.15Ej)\n"
+#define REAL_SCIFMT_SPACE_BOTH   " %.15E "
+#define REAL_SCIFMT_SPACE_BEFORE " %.15E"
+#define REAL_SCIFMT_SPACE_AFTER  "%.15E "
+#define REAL_SCIFMT_NOSPACE      "%.15E"
+#define REAL_SCIFMT_LINEBREAK    "%.15E\n"
+/** \brief Default character used to indicate beginning of comment lines */
+#define DEFAULT_COMMENT_CHAR     '#'
 
 /** \brief Character interpreted as beginning of comment line
  *
@@ -78,11 +78,11 @@ jump_next_line(FILE* f);
  *
  * Preferably, the initial cursor position should be in the beginning of
  * a new line. Spaces and empty lines are also skipped but any different
- * different character from \code comment_char \endcode count as a non-
- * comment trigger. By default \code comment_char = '#' \endcode
+ * different character from `comment_char` count as a non-comment trigger.
+ * By default `comment_char` is '#'
  *
- * \param f[in]         Pointer to a open file
- * \param how_start[in] Either CURSOR_POSITION or NEXT_LINE
+ * \param[in] f         Pointer to a open file
+ * \param[in] how_start Either CURSOR_POSITION or NEXT_LINE
  *
  * \see comment_char
  */

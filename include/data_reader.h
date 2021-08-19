@@ -58,7 +58,7 @@ rarr_stream_read(FILE* f, char fmt[], int arr_size, double* arr);
 
 /** \brief Read consecutive formatted complex numbers to set a matrix
  *
- * \param[in] f         full path to text file
+ * \param[in] fname     full path to text file
  * \param[in] fmt       string formatter for every scanf
  * \param[in] init_line line number to start reading
  * \param[in] nrows     number of rows in the matrix
@@ -76,7 +76,7 @@ cmat_txt_read(
 
 /** \brief Read consecutive formatted float numbers to set a matrix
  *
- * \param[in] f         full path to text file
+ * \param[in] fname     full path to text file
  * \param[in] fmt       string formatter for every scanf
  * \param[in] init_line line number to start reading
  * \param[in] nrows     number of rows in the matrix

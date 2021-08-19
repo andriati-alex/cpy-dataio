@@ -59,14 +59,14 @@ cmat_print(int nrows, int ncols, double complex** mat);
 
 /** \brief Print on screen real matrix given in row-major format
  *
- * \warning The array size must be at least \code nrows * ncols \endcode
+ * \warning The array size must be at least `nrows * ncols`
  */
 void
 rrowmajor_print(int nrows, int ncols, double* arr);
 
 /** \brief Print on screen complex matrix given in row-major format
  *
- * \warning The array size must be at least \code nrows * ncols \endcode
+ * \warning The array size must be at least `nrows * ncols`
  */
 void
 crowmajor_print(int nrows, int ncols, double complex* arr);

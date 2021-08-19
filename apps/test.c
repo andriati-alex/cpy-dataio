@@ -4,8 +4,9 @@
  * \date August/2021
  * \brief Simple executable to test the lib
  *
- * Read some files in \code test_files \endcode directory and record their
- * contents in new files using some of the functions provided in the lib
+ * Read some files in `test_files` directory and record their
+ * contents in new files using some of the functions provided
+ * in the lib
  */
 
 #include "cpydataio.h"
