@@ -71,7 +71,7 @@ cmat_txt(char fname[], char fmt[], int nrows, int ncols, double complex** mat)
     f = open_file(fname, "w");
     for (int i = 0; i < nrows; i++)
     {
-        carr_stream_record(f, fmt, CURSOR_POSITION, LINE_BREAK, ncols, mat[i]);
+        carr_stream_record(f, fmt, CURSOR_POSITION, LINEBREAK, ncols, mat[i]);
     }
     fclose(f);
 }
@@ -90,7 +90,7 @@ cmat_append(
     if (in_newline) fprintf(f, "\n");
     for (int i = 0; i < nrows; i++)
     {
-        carr_stream_record(f, fmt, CURSOR_POSITION, LINE_BREAK, ncols, mat[i]);
+        carr_stream_record(f, fmt, CURSOR_POSITION, LINEBREAK, ncols, mat[i]);
     }
     fclose(f);
 }
@@ -142,7 +142,7 @@ rmat_txt(char fname[], char fmt[], int nrows, int ncols, double** mat)
     f = open_file(fname, "w");
     for (int i = 0; i < nrows; i++)
     {
-        rarr_stream_record(f, fmt, CURSOR_POSITION, LINE_BREAK, ncols, mat[i]);
+        rarr_stream_record(f, fmt, CURSOR_POSITION, LINEBREAK, ncols, mat[i]);
     }
     fclose(f);
 }
@@ -161,7 +161,7 @@ rmat_append(
     if (in_newline) fprintf(f, "\n");
     for (int i = 0; i < nrows; i++)
     {
-        rarr_stream_record(f, fmt, CURSOR_POSITION, LINE_BREAK, ncols, mat[i]);
+        rarr_stream_record(f, fmt, CURSOR_POSITION, LINEBREAK, ncols, mat[i]);
     }
     fclose(f);
 }

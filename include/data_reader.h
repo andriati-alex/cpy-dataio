@@ -1,3 +1,14 @@
+/** \file data_reader.h
+ *
+ * \author Alex Andriati
+ * \date August/2021
+ * \brief Numerical data reading from text files
+ *
+ * In general, the routines share a common API requiring file name,
+ * formatter, line to start reading and array/matrix information
+ *
+ */
+
 #include <complex.h>
 #include <stdio.h>
 
@@ -49,7 +60,7 @@ rarr_stream_read(FILE* f, char fmt[], int arr_size, double* arr);
  *
  * \param[in] f         full path to text file
  * \param[in] fmt       string formatter for every scanf
- * \param[in] init_line line number to start
+ * \param[in] init_line line number to start reading
  * \param[in] nrows     number of rows in the matrix
  * \param[in] ncols     number of columns in the matrix
  * \param[out] mat      matrix to set with values read
@@ -67,7 +78,7 @@ cmat_txt_read(
  *
  * \param[in] f         full path to text file
  * \param[in] fmt       string formatter for every scanf
- * \param[in] init_line line number to start
+ * \param[in] init_line line number to start reading
  * \param[in] nrows     number of rows in the matrix
  * \param[in] ncols     number of columns in the matrix
  * \param[out] mat      matrix to set with values read

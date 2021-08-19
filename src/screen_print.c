@@ -111,7 +111,7 @@ carr_print(
 }
 
 void
-rmat_print(int nrows, int ncols, double** M)
+rmat_print(int nrows, int ncols, double** mat)
 {
     for (int i = 0; i < nrows; i++)
     {
@@ -119,14 +119,14 @@ rmat_print(int nrows, int ncols, double** M)
         for (int j = 0; j < ncols; j++)
         {
             printf("  ");
-            rprint(M[i][j]);
+            rprint(mat[i][j]);
         }
     }
     printf("\n");
 }
 
 void
-cmat_print(int nrows, int ncols, double complex** M)
+cmat_print(int nrows, int ncols, double complex** mat)
 {
     for (int i = 0; i < nrows; i++)
     {
@@ -134,7 +134,7 @@ cmat_print(int nrows, int ncols, double complex** M)
         for (int j = 0; j < ncols; j++)
         {
             printf("  ");
-            cprint(M[i][j]);
+            cprint(mat[i][j]);
         }
     }
     printf("\n");

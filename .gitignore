@@ -1,2 +1,5 @@
 .ccls
 .clang-format
+bin/
+lib/
+build/

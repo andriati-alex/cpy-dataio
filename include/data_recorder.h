@@ -1,12 +1,22 @@
 /** \file data_recorder.h
  *
  * \author Alex Andriati
- * \date August 2021
+ * \date August/2021
  * \brief Module for data recording in text files
  *
  * In this module the routines provide tools for cleaner usage of file
  * writting, especially for data arrays. The module is design to offer
- * suitable interface to numpy savetxt function
+ * suitable interface to numpy savetxt/loadtxt functions
+ *
+ * The core functions are those related to **stream** keyword, which
+ * require an open file to use and record array of data. The others,
+ * are just wrappers to carry out the operations from file name, and
+ * in most cases, it is possible to have an equivalent form with raw
+ * **stream** functions
+ *
+ * For instance the \code carr_column_txt \endcode is equivalent to
+ * first open the file and then call \code carr_stream_record \endcode
+ * using the formatter with a linebreak character '\n' appended.
  */
 
 #ifndef DATA_RECORDER_H
@@ -22,12 +32,12 @@
  * must have at least two double pattern in string contents for real
  * and imag parts formatting
  *
- * \param f[in]             Pointer to open file
- * \param fmt[in]           String formatter with at least two double patterns
- * \param in_newline[in]    Whether to place or not a linebreak before record
- * \param add_linebreak[in] Whether to place or not a linebreak at stream end
- * \param arr_size[in]      number of values to record
- * \param arr[in]           array with values to record
+ * \param f[in]          Pointer to open file
+ * \param fmt[in]        String formatter with at least two double patterns
+ * \param how_start[in]  Whether to place or not a linebreak before record
+ * \param how_finish[in] Whether to place or not a linebreak at stream end
+ * \param arr_size[in]   number of values to record
+ * \param arr[in]        array with values to record
  *
  * \see enum StartStream
  * \see enum FinishStream
@@ -37,8 +47,8 @@ void
 carr_stream_record(
     FILE*             f,
     char              fmt[],
-    enum StartStream  in_newline,
-    enum FinishStream add_linebreak,
+    enum StartStream  how_start,
+    enum FinishStream how_finish,
     int               arr_size,
     double complex*   arr);
 
@@ -47,12 +57,12 @@ carr_stream_record(
  * All values are recorded according to the provided formatter which
  * must have only one double pattern in string contents
  *
- * \param f[in]             Pointer to open file
- * \param fmt[in]           String formatter with only one double pattern
- * \param in_newline[in]    Whether to place or not a linebreak before record
- * \param add_linebreak[in] Whether to place or not a linebreak at stream end
- * \param arr_size[in]      number of values to record
- * \param arr[in]           array with values to record
+ * \param f[in]          Pointer to open file
+ * \param fmt[in]        String formatter with only one double pattern
+ * \param how_start[in]  Whether to place or not a linebreak before record
+ * \param how_finish[in] Whether to place or not a linebreak at stream end
+ * \param arr_size[in]   number of values to record
+ * \param arr[in]        array with values to record
  *
  * \see enum StartStream
  * \see enum FinishStream
@@ -62,8 +72,8 @@ void
 rarr_stream_record(
     FILE*             f,
     char              fmt[],
-    enum StartStream  in_newline,
-    enum FinishStream add_linebreak,
+    enum StartStream  how_start,
+    enum FinishStream how_finish,
     int               arr_size,
     double*           arr);
 
@@ -144,7 +154,7 @@ void
 cmat_append(
     char             fname[],
     char             fmt[],
-    enum StartStream in_newline,
+    enum StartStream how_start,
     int              nrows,
     int              ncols,
     double complex** mat);
@@ -187,7 +197,7 @@ void
 cmat_append_transpose(
     char             fname[],
     char             fmt[],
-    enum StartStream in_newline,
+    enum StartStream how_start,
     int              nrows,
     int              ncols,
     double complex** mat);
@@ -229,7 +239,7 @@ void
 rmat_append(
     char             fname[],
     char             fmt[],
-    enum StartStream in_newline,
+    enum StartStream how_start,
     int              nrows,
     int              ncols,
     double**         mat);
@@ -272,7 +282,7 @@ void
 rmat_append_transpose(
     char             fname[],
     char             fmt[],
-    enum StartStream in_newline,
+    enum StartStream how_start,
     int              nrows,
     int              ncols,
     double**         mat);
@@ -289,8 +299,8 @@ void
 cmat_rowmajor_stream(
     FILE*             f,
     char              fmt[],
-    enum StartStream  in_newline,
-    enum FinishStream add_linebreak,
+    enum StartStream  how_start,
+    enum FinishStream how_finish,
     int               nrows,
     int               ncols,
     double complex**  mat);
@@ -307,8 +317,8 @@ void
 rmat_rowmajor_stream(
     FILE*             f,
     char              fmt[],
-    enum StartStream  in_newline,
-    enum FinishStream add_linebreak,
+    enum StartStream  how_start,
+    enum FinishStream how_finish,
     int               nrows,
     int               ncols,
     double**          mat);
@@ -348,8 +358,8 @@ void
 carr_append_stream(
     char              fname[],
     char              fmt[],
-    enum StartStream  in_newline,
-    enum FinishStream add_linebreak,
+    enum StartStream  how_start,
+    enum FinishStream how_finish,
     int               arr_size,
     double complex*   arr);
 
@@ -364,8 +374,8 @@ void
 rarr_append_stream(
     char              fname[],
     char              fmt[],
-    enum StartStream  in_newline,
-    enum FinishStream add_linebreak,
+    enum StartStream  how_start,
+    enum FinishStream how_finish,
     int               arr_size,
     double*           arr);
 
@@ -380,8 +390,8 @@ void
 cmat_rowmajor_append_stream(
     char              fname[],
     char              fmt[],
-    enum StartStream  in_newline,
-    enum FinishStream add_linebreak,
+    enum StartStream  how_start,
+    enum FinishStream how_finish,
     int               nrows,
     int               ncols,
     double complex**  mat);
@@ -397,8 +407,8 @@ void
 rmat_rowmajor_append_stream(
     char              fname[],
     char              fmt[],
-    enum StartStream  in_newline,
-    enum FinishStream add_linebreak,
+    enum StartStream  how_start,
+    enum FinishStream how_finish,
     int               nrows,
     int               ncols,
     double**          mat);
