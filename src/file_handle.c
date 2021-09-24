@@ -27,7 +27,7 @@ open_file(char fname[], char mode[])
 }
 
 unsigned int
-number_of_lines(char fname[], enum Bool skip_comments)
+number_of_lines(char fname[])
 {
     char         c;
     FILE*        f;
@@ -36,7 +36,7 @@ number_of_lines(char fname[], enum Bool skip_comments)
     linebreaks = 0;
     has_end_linebreak = 0;
     f = open_file(fname, "r");
-    if (skip_comments) jump_comment_lines(f, CURSOR_POSITION);
+    jump_comment_lines(f, CURSOR_POSITION);
     while ((c = getc(f)) != EOF)
     {
         has_end_linebreak = 0;

@@ -28,13 +28,6 @@ enum FinishStream
     LINEBREAK
 };
 
-/** \brief Simple boolean information */
-enum Bool
-{
-    FALSE,
-    TRUE
-};
-
 #define CPLX_SCIFMT_SPACE_BOTH   " (%.15E%+.15Ej) "
 #define CPLX_SCIFMT_SPACE_BEFORE " (%.15E%+.15Ej)"
 #define CPLX_SCIFMT_SPACE_AFTER  "(%.15E%+.15Ej) "
@@ -68,7 +61,7 @@ open_file(char fname[], char mode[]);
 
 /** \brief Return number of lines in a file */
 unsigned int
-number_of_lines(char fname[], enum Bool skip_comments);
+number_of_lines(char fname[]);
 
 /** \brief Move reading cursor of a file to the beginning of next line */
 void
